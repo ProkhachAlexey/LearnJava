@@ -1,0 +1,767 @@
+* Глава 6. Введение в классы
+Любое понятие, которое требуется реализовать в программе на Java, должно быть инкапсулировано в пределах класса.
+** Основы классов
+Класс определяет новый тип данных, которым можно воспользоваться для создания объектов данного типа.
+Класс - это шаблон для создания объекта, а объект - это экземпляр класса.
+*** Общая форма класса
+#+begin_src java
+class имя_переменной {
+    тип переменная_экземпляра1;
+    тип переменная_экземпляра2;
+
+    тип имя_метода1(список_параметров) {
+        // тело метода;
+    }
+
+    тип имя_метода2(список_параметров) {
+        // тело метода;
+    }
+}
+#+end_src
+Данные или переменные, определенные в классе, называются переменными экземпляра. Код содержится в теле методов.
+Переменные экземпляра называются так, поскольку каждый объект класса содержит собственные копии этих переменных. Таким образом данные одного объекта отделены и отличаются от данных другого объекта.
+*** Простой класс
+#+begin_src java
+class Box {
+    double width;
+    double height;
+    double depth;
+}
+#+end_src
+Класс определяет новый тип данных. В данном случае новый тип данных называется Box.
+Создание объекта:
+#+begin_src java
+Box mybox = new Box();
+#+end_src
+Объект mybox стал экземпляром класса Box.
+В объекте класса Box присвоение копий переменным экземпляра width, height и depth произодится через оператор ".":
+#+begin_src java
+mybox.width = 100;
+mybox.height = 200;
+mybox.depth = 150;
+#+end_src
+В общем, оператор "." служит для доступа как к переменным экземпляра, так и к методам в пределах объетка.
+Полноценное использование класса Box:
+#+begin_src java
+class Box {
+    double width;
+    double height;
+    double depth;
+}
+
+class BoxDemo {
+    public static void main(String args[]) {
+        Box mybox = new Box();
+        double vol;
+
+        mybox.width = 10;
+        mybox.height = 20;
+        mybox.depth = 15;
+        vol = mybox.width * mybox.height * mybox.depth;
+        System.out.println("Объем равен " + vol);
+    }
+}
+#+end_src
+** Объявление объектов
+Создание объектов класса представляет собой двухэтапный процесс.
+Сначала объявляется переменная типа класса. Эта переменная не создает объект. Она является переменной, которая ссылается на объект.
+Затем создается физическая копия объекта с присвоением ее переменной, созданной на первом этапе, с помощью оператора new.
+Оператор new динамически (во время выполнения) резервирует память для объекта и возвращает ссылку на него.
+#+begin_src java
+Box mybox;  // объявить ссылку на абстрактный объект
+mybox = new Box();  // выделить память для объекта Box
+#+end_src
+*** Подробное рассмотрение операции new
+Общая форма операции имеет вид:
+#+begin_src java
+переменная_класса = new имя_класса();
+#+end_src
+имя_класса() - в данном случае является конструктором по умолчанию.
+В случае нехватки ОЗУ при работе оператора new возникает исключение времени выполнения (обработка исключений).
+В действительности оператор new вызывает конструктор класса.
+** Присваивание переменным ссылок на объекты
+#+begin_src java
+Box b1 = new Box();
+Box b2 = b1;
+#+end_src
+В данном случае переменные b1 и b2 ссылаются на один и тот же объект.
+** Введение в методы
+Общая форма объявления метода:
+#+begin_src java
+тип имя(список_параметров) {
+    // тело метода
+}
+#+end_src
+Тип метода может быть как допустимым типом данных (int, float ...) так и типом созданного класса.
+*** Ввод метода в класс Box
+Пример:
+#+begin_src java
+class Box {
+    double width;
+    double height;
+    double depth;
+
+    void volume() {
+        System.out.print("Объем равен ");
+        System.out.println(width * height * depth);
+    }
+}
+
+class BoxDemo {
+    public static void main(String[] args) {
+        Box mybox1 = new Box();
+        Box mybox2 = new Box();
+
+        mybox1.width = 10;
+        mybox1.height = 20;
+        mybox1.depth = 15;
+
+        mybox2.width = 3;
+        mybox2.height = 6;
+        mybox2.depth = 9;
+
+        mybox1.volume();
+        mybox2.volume();
+    }
+}
+#+end_src
+*** Возврат значений
+описание оператора return.
+*** Ввод метода, принимающего параметры
+Параметр - это определенная в методе переменная, которая принимает заданное значение при вызове метода.
+Агрумент - это значение, передаваемое методу при его вызове.
+#+begin_src java
+class Box {
+    double width;
+    double height;
+    double depth;
+
+    double volume() {
+        return width * height * depth;
+    }
+
+    void setDim(double w, double h, double d) {
+        width = w;
+        height = h;
+        depth = d;
+    }
+}
+
+class BoxDemo {
+    public static void main(String[] args) {
+        Box mybox1 = new Box();
+        Box mybox2 = new Box();
+        mybox1.setDim(10,20,15);
+        mybox2.setDim(3,6,9);
+        System.out.println("Volume 1 = " + mybox1.volume());
+        System.out.println("Volume 2 = " + mybox2.volume());
+    }
+}
+#+end_src
+** Конструкторы
+Конструктор инициализирует объект при его создании.
+Имя конструктора совпадает с именем класса, в котором он находится.
+Синтаксис конструктора похож на синтаксис метода, за исключением отсутствия типа возвращаемого значения (даже void).
+Это объясняется тем, что неявно заданным возвращаемым типом конструктора класса является тип самого класса.
+Пример:
+#+begin_src java
+class Box {
+    double width;
+    double height;
+    double depth;
+
+    Box() {
+        System.out.println("Конструирование объекта Box");
+        width = 10;
+        height = 10;
+        depth = 10;
+    }
+
+    double volume() {
+        return width * height * depth;
+    }
+}
+
+class BoxDemo {
+    public static void main(String[] args) {
+        Box mybox1 = new Box();
+        Box mybox2 = new Box();
+        double vol;
+
+        vol = mybox1.volume();
+        vol = mybox2.volume();
+    }
+}
+#+end_src
+Если в классе явно не определено никакого конструктора, то вызывается конструктор по умолчанию.
+Конструктор по умолчанию инициализирует все переменные экземпляра установленными по умолчанию значениями.
+*** Параметризированные конструкторы
+#+begin_src java
+class Box {
+    double width;
+    double height;
+    double depth;
+
+    Box(double w, double h, double d) {
+        width = w;
+        height = h;
+        depth = d;
+    }
+
+    double volume() {
+        return width * height * depth;
+    }
+}
+
+class BoxDemo {
+    public static void main(String[] args) {
+        Box mybox1 = new Box(10,20,15);
+        Box mybox2 = new Box(3,6,9);
+        System.out.println("vol1 = " + mybox1.volume());
+        System.out.println("vol2 = " + mybox2.volume());
+    }
+}
+#+end_src
+** Ключевое слово this
+this - это ссылка на текущий объект, в контексте которого исполяется конструктор/метод.
+*** Сокрытие переменных экземпляра
+Если имя параметра конструктора/метода совпадает с именем переменной экземпляра, то для доступа к ней используется префикс this.
+** Сборка мусора
+В отсутствие любых ссылок на объект считается, что этот объект больше не нужен и занимаемую им память можно освободить с помощью процесса "сборка мусора".
+** Класс Stack
+Рассмотрим организацию стека как один из типичных примеров инкапсуляции:
+Данные в стеке хранятся по принципу "первым пришел, последним обнаружен".
+Для управлением стеком существует две операции: размещение (в стеке) и извлечение (из стека).
+#+begin_src java
+class Stack {
+    int stck[] = new int[10];
+    int tos;
+
+    // инициализация вершины стека
+    Stack() {
+        tos = -1;
+    }
+
+    // размещение элемента в стеке
+    void push(int item) {
+        if(tos == 9)
+            System.out.println("Стек заполнен.");
+        else
+            stck[++tos] = item;
+    }
+
+    // извлечение элемента из стека
+    int pop() {
+        if(tos < 0) {
+            System.out.println("Стек не загружен.");
+            return 0;
+        }
+        else
+            return stck[tos--];
+    }
+}
+
+class TestStack {
+    public static void main(String[] args) {
+        Stack mystack1 = new Stack();
+        Stack mystack2 = new Stack();
+
+        for(int i = 0; i < 10; i++)     mystack1.push(i);
+        for(int i = 10; i < 20; i++)    mystack2.push(i);
+
+        System.out.println("Содердимое стека mystack1:");
+        for(int i = 0; i < 10; i++)     System.out.println(mystack1.pop());
+
+        System.out.println("Содердимое стека mystack2:");
+        for(int i = 0; i < 10; i++)     System.out.println(mystack2.pop());
+    }
+}
+#+end_src
+
+* Глава 7. Подробное рассмотрение классов и методов
+** Перегрузка методов
+Методы называются перегруженными, а сам процемм называется перегрузкой методов, когда в одном и том же классе находятся два или нескольких методов с одинаковым именем, но обязательно с разным объявлением параметров.
+#+begin_src java
+class OverloadDemo {
+    void test() {
+        System.out.println("Параметры отсутствуют");
+    }
+    void test(int a) {
+        System.out.println("a: " + a);
+    }
+    void test(int a, int b) {
+        System.out.println("a и b: " + a + " " + b);
+    }
+    double test(double a) {
+        System.out.println("double a: " + a);
+        return a*a;
+    }
+}
+
+public class Overload {
+    public static void main(String[] args) {
+        OverloadDemo ob = new OverloadDemo();
+        double result;
+        ob.test();
+        ob.test(10);
+        ob.test(10,20);
+        result = ob.test(123.25);
+        System.out.println(
+                "Результат вызова ob.test(123.25): " + result);
+    }
+}
+#+end_src
+Важную роль в разрешении перегрузки может играть автоматическое преобразование типов:
+#+begin_src java
+class OverloadDemo {
+    void test() {
+        System.out.println("Параметры отсутствуют");
+    }
+    void test(int a, int b) {
+        System.out.println("a и b: " + a + " " + b);
+    }
+    void test(double a) {
+        System.out.println("Внутреннее преобразование при вызове "
+        + "test(double) a: " + a);
+    }
+}
+
+public class Overload {
+    public static void main(String[] args) {
+        OverloadDemo ob = new OverloadDemo();
+        int i = 88;
+        ob.test();
+        ob.test(10,20);
+        ob.test(i);
+        ob.test(123.2);
+    }
+}
+#+end_src
+Перегрузка методов поддерживает полиморфизм.
+На практике следует перегружать только тесно связанные операции.
+*** Перегрузка конструкторов
+Перегруженный конструктор вызвается в зависимости от переданных в него параметров.
+#+begin_src java
+class Box {
+    double width;
+    double height;
+    double depth;
+    Box(double w, double h, double d) {
+        width = w;
+        height = h;
+        depth = d;
+    }
+    // Обозначение неинициализированного конструктора
+    Box() {
+        width = height = depth = -1;
+    }
+    // Конструктор, используемый при создании куба
+    Box(double len) {
+        width = height = depth = len;
+    }
+    // Расчитать и возвратить объем
+    double volume() {
+        return width * height * depth;
+    }
+}
+
+public class OverloadCons {
+    public static void main(String[] args) {
+        Box mybox1 = new Box(10.,20,15);
+        Box mybox2 = new Box();
+        Box mycube = new Box(7);
+    }
+}
+#+end_src
+** Применение объектов в качестве параметров
+Пример:
+#+begin_src java
+class Test {
+    int a, b;
+    Test(int a, int b) {
+        this.a = a;
+        this.b = b;
+    }
+    // Возвратить true в случае равенства двух объектов
+    // т.е. сравнение переменных объектов
+    boolean equalTo(Test o) {
+        if (o.a == a && o.b == b) return true;
+        else return false;
+    }
+}
+
+public class PassOb {
+    public static void main(String[] args) {
+        Test ob1 = new Test(100, 22);
+        Test ob2 = new Test(100, 22);
+        Test ob3 = new Test(-1, -1);
+        System.out.println("ob1 == ob2: " + ob1.equalTo(ob2));
+        System.out.println("ob1 == ob3: " + ob1.equalTo(ob3));
+    }
+}
+#+end_src
+Объекты в качестве параметров применяются в конструкторах:
+#+begin_src java
+class Box {
+    double width;
+    double height;
+    double depth;
+    Box(Box ob) {
+        width = ob.width;
+        height = ob.height;
+        depth = ob.depth;
+    }
+    Box(double width, double height, double depth) {
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+    }
+    Box() {
+        width = -1;
+        height = -1;
+        depth = -1;
+    }
+    Box(double len) {
+        width = height = depth = len;
+    }
+    double volume() {
+        return width * height * height;
+    }
+}
+
+public class OverloadCons2 {
+    public static void main(String[] args) {
+        Box mybox1 = new Box(10,20,15);
+        Box mybox2 = new Box();
+        Box mycube = new Box(7);
+        Box myclone = new Box(mybox1);
+        double vol;
+        vol = mybox1.volume();
+        System.out.println("Объем mybox1 равен " + vol);
+        vol = mybox2.volume();
+        System.out.println("Объем mybox2 равен " + vol);
+        vol = mycube.volume();
+        System.out.println("Объем куба равен " + vol);
+        vol = myclone.volume();
+        System.out.println("Объем клона равен " + vol);
+    }
+}
+#+end_src
+Таким образом, создаются реальные копии объектов с разными ссылками, в отличае от:
+#+begin_src java
+Box mybox1 = new Box(10,20,15);
+Box mybox2 = mybox1;
+#+end_src
+** Подробное рассмотрение особенностей передачи аргументов
+Для передачи аргументов подпрограмме имеется два способа.
+Первым способом является вызов по значению. В этом случае значение аргумента копируется в формальный параметр подпрограммы.
+Изменения, вносимые в параметр подпрограммы, не оказывают никакого влияния на аргумент.
+Вторым способом является вызов по ссылке. В этом случае параметру передается ссылка на аргумент, а не его значение.
+В теле подпрограммы эта сслыка служит для обращения к конкретному аргументу, указанному в вызове.
+Это означает, что изменения, вносимые в параметр подпрограммы, будут оказывать влияние на аргумент, используемый при ее вызове.
+Все аргументы в Java передаются при вызове по значению, но конкретный результат зависит от того, какой именно передается тип данных: примитивный или ссылочный.
+Когда методу передается примитивный тип данных, его передача происходит по значению. В итоге создается копия аргумента, и все, что происходит с параметром, принимающим этот аргумент, не оказывает никакого влияния за пределами вызываемого метода.
+Пример:
+#+begin_src java
+class Test {
+   void meth(int i, int j) {
+      i *= 2;
+      j /= 2;
+   }
+}
+
+public class CallByValue {
+   public static void main(String[] args) {
+      Test ob = new Test();
+      int a = 15, b = 20;
+      System.out.println("a = " + a + " b = "  + b);
+      ob.meth(a,b);
+      System.out.println("a = " + a + " b = "  + b);
+   }
+}
+#+end_src
+При передаче объекта в качестве аргумента методу ситуация меняется коренным образом, поскольку объекты передаются при вызове по ссылке.
+#+begin_src java
+class Test {
+   int a, b;
+   Test(int i, int j) {
+      a = i;
+      b = j;
+   }
+   void meth(Test o) {
+      o.a *= 2;
+      o.b /= 2;
+   }
+}
+
+public class CallByValue {
+   public static void main(String[] args) {
+      Test ob = new Test(15,20);
+      System.out.println("a = " + ob.a + " b = "  + ob.b);
+      ob.meth(ob);
+      System.out.println("a = " + ob.a + " b = "  + ob.b);
+   }
+}
+#+end_src
+В данном случае действия, выполняемые в теле метода meth() оказывают влияние на объект, указанный в качестве аргумента.
+** Возврат объектов
+Метод может возвращать любой тип данных, в том числе созданные типы классов.
+#+begin_src java
+class Test {
+   int a;
+   Test(int i) {
+      a = i;
+   }
+   Test incrByTen() {
+      Test temp = new Test(a+10);
+      return temp;
+   }
+}
+
+public class CallByValue {
+   public static void main(String[] args) {
+      Test ob1 = new Test(2);
+      Test ob2;
+      ob2 = ob1.incrByTen();
+      System.out.println("ob1.a: " + ob1.a);
+      System.out.println("ob2.a: " + ob2.a);
+      ob2 = ob2.incrByTen();
+      System.out.println(
+            "ob2.a после второго увеличения значения: "
+            + ob2.a);
+   }
+}
+#+end_src
+При каждом вызове метода incrByTen() создается новый объект, а ссылка на него возвращается вызываемой части программы.
+При отсутствии любых ссылок на объект он будет уничтожен при последующей сборке "мусора";
+** Рекурсия
+Рекурсия это средство, которое позволяет методу вызывать самого себя.
+#+begin_src java
+class Factorial {
+   int fact(int n) {
+      int result = 0;
+      if (n == 0 || n == 1) return 1;
+      result = fact(n - 1) * n;
+      return result;
+   }
+}
+
+public class Recursion {
+   public static void main(String[] args) {
+      Factorial f = new Factorial();
+      System.out.println(f.fact(5));
+   }
+}
+#+end_src
+Пример рекрсивного вывода элементов массива на экран:
+#+begin_src java
+class RecTest {
+   int values[];
+   RecTest(int i) {
+      values = new int[i];
+   }
+
+   void printArray(int i) {
+      if (i == 0) return;
+      else printArray(i - 1);
+      System.out.println("[" + (i - 1) + "] " + values[i - 1]);
+   }
+}
+
+public class Recursion2 {
+   public static void main(String[] args) {
+      RecTest ob = new RecTest(10);
+      int i;
+      for (i = 0; i < 10; i++) ob.values[i] = i;
+      ob.printArray(10);
+   }
+}
+#+end_src
+** Введение в управление доступом
+Инкапсуляция связывает данные с манипулирующим ими кодом.
+Но инкапсуляция предоставляет еще одно важное средство: управление доступом.
+Способ доступа к члену класса определяется модификатором доступа, присутвующем при его объявлении.
+Модификаторы: public (публичный), private (закрытый), protected (защищенный). Модификатор protected применяется только при наследовании.
+В отсутствие модификатора доступа по умолчанию член класса считается открытым в своем пакете, но недоступным для кода, находящегося за пределами этого пакета.
+Как правило, доступ к членам класса приходится ограничивать, предоставляя доступ к ним только через методы.
+#+begin_src java
+class Test{
+   int a;
+   public int b;
+   private int c;
+
+   void setc(int i) {
+      c = i;
+   }
+
+   int getc() {
+      return c;
+   }
+}
+
+public class AccessTest {
+   public static void main(String[] args) {
+      Test ob = new Test();
+      ob.a = 10;
+      ob.b = 20;
+      ob.setc(100);
+      System.out.println(ob.getc());
+   }
+}
+#+end_src
+Класс Stack из Главы 6
+#+begin_src java
+class Stack {
+   private int stck[] = new int[10];
+   private int tos;
+   // инициализировать вершину стека
+   Stack() {
+      tos = -1;
+   }
+   // разместить элемент в стеке
+   void push(int item) {
+      if (tos == 9)
+         System.out.println("Стек заполнен.");
+      else
+         stck[++tos] = item;
+   }
+   // извлечь элемент из стека
+   int pop() {
+      if (tos < 0) {
+         System.out.println("Стек не загружен.");
+         return 0;
+      }
+      else
+         return stck[tos--];
+   }
+}
+
+public class TestStack {
+   public static void main(String[] args) {
+      Stack mystack1 = new Stack();
+      Stack mystack2 = new Stack();
+      // разместить числа в стеке
+      for (int i = 0; i < 10; i++) mystack1.push(i);
+      for (int i = 10; i < 20; i++) mystack2.push(i);
+      // извлечь эти числа из стека
+      System.out.println("Стек в mystack1:");
+      for (int i = 0; i < 10; i++)
+         System.out.println(mystack1.pop());
+
+      System.out.println("Стек в mystack2:");
+      for (int i = 0; i < 10; i++)
+         System.out.println(mystack2.pop());
+      // эти операторы недопустимы
+      // mystack1.tos. = -2;
+      // mystack2.stck[3] = 100;
+   }
+}
+#+end_src
+** Ключевое слово static
+Для использования переменной экземпляра или метода класса без создания объетка используется static (метод main(), методы стандартных классов).
+Переменные экземпляра, объявленные как static, по существу, являются глобальными переменными.
+Созданные объкеты используют одну и ту же переменную static.
+На методы, объявленные как static, налагаются ограничения:
+- они могут вызывать только другие статические методы;
+- им доступны только статические переменные;
+- они не могут делать ссылки типа this или super.
+Можно также объявить статический блок:
+#+begin_src java
+class UseStatic {
+   static int a = 3;
+   static int b;
+
+   static void meth(int x) {
+      System.out.println("x = " + x);
+      System.out.println("a = " + a);
+      System.out.println("b = " + b);
+   }
+   static {
+      System.out.println("Статический блок");
+      b = a * 4;
+   }
+   public static void main(String[] args) {
+    meth(42);
+   }
+}
+#+end_src
+Использование статических переменных или методов за пределами класса:
+#+begin_src java
+class StaticDemo {
+   static int a = 42;
+   static int b = 99;
+
+   static void callme() {
+      System.out.println("a = " + a);
+   }
+}
+
+public class StaticByName {
+   public static void main(String[] args) {
+      StaticDemo.callme();
+      System.out.println("b = " + StaticDemo.b);
+   }
+}
+#+end_src
+** Ключевое слово final
+При использовании final создаются константы.
+#+begin_src java
+final int FILE_NEW = 1;
+final int FILE_OPEN = 2;
+final int FILE_SAVE = 3;
+final int FILE_SAVEAS = 4;
+final int FILE_QUIT = 5;
+#+end_src
+Кроме полей, объявленными как final могут быть параметры метода и локальные переменные.
+Это препядствует изменению параметра метода, тогда как аналогичное объявление локальной переменной - присвоению ей значения больше одного раза.
+Ключевое слово final можно указывать и в объявлении методов. В данном случае это имеет совсем другое значение (что-то с наследованием).
+** Еще раз о массивах
+Размер массива хранится в его переменной экземпляра legth:
+#+begin_src java
+public class Length {
+   public static void main(String[] args) {
+      int a1[] = new int[10];
+      int a2[] = {3,5,7,1,8,99,44,-10};
+      int a3[] = {4,3,2,1};
+      System.out.println("длина а1 равна " + a1.length);
+      System.out.println("длина а2 равна " + a2.length);
+      System.out.println("длина а3 равна " + a3.length);
+   }
+}
+#+end_src
+** Вложенные и внутренние классы
+Вложенным называется класс, расположенный внутри другого класса.
+Область действия вложенного класса ограничивается областью действия внешнего класса.
+Вложенный класс имеет доступ к членам (в т.ч. закрытым) того класса, в который он вложен.
+Но внешний класс не имеет доступа к членам вложенного класса.
+Типы вложенных классов: статические и нестатические.
+Статический вложенный класс объявляется при помощи static, и он должен обращаться только к статическим членам своего внешнего класса посредством объекта.
+Внутренний класс - это нестатический вложенный класс. Он имеет доступ ко всем переменным и методам своего внешнего класса.
+#+begin_src java
+class Outer {
+   int outer_x = 100;
+   void test() {
+      Inner inner = new Inner();
+      inner.display();
+   }
+
+   class Inner {
+      void display() {
+         System.out.println("вывод: outer_x = " + outer_x);
+      }
+   }
+}
+
+public class InnerClassDemo {
+   public static void main(String[] args) {
+      Outer outer = new Outer();
+      outer.test();
+   }
+}
+#+end_src
+Вложенные классы удобно использовать при обработке событий (глава 24).
+** Краткий обзор класса String
+** Применение аргуметов командной строки
+** Аргументы переменной длины
+*** Перегрузка методов с аргументами переменной длины
+*** Аргументы переменной длины и неоднозначность
