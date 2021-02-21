@@ -1121,8 +1121,122 @@ public class DemoBoxWeight {
 #+end_src
 Объекту типа суперкласса (plainbox) можно присвоить ссылку на объект типа подкласса (weightbox).
 ** Ключевое слово super
+С помощью ключевого слова super подклассу представляется возможность сосласться на его непосредственный суперкласс.
+У ключевого слова super имеются две общие формы. Первая форма служит для вызова конструктора суперкласса.
+Вторая - для обращения к члену суперкласса, скрываемому членом подкласса.
 *** Вызов конструкторов суперкласса и помощью ключевого слова super
+Из подкласса можно вызвать конструктор, определенный в его суперклассе:
+#+begin_src java
+super(список_аргументов);
+#+end_src
+Вызов super(); дожен находиться в первом операторе, выполняемом в конструкторе подкласса.
+#+begin_src java
+class BoxWeight extends Box {
+   double weight;
+   BoxWeight(double w, double h, double d, double m) {
+      super(w,h,d);
+      weight = m;
+   }
+}
+#+end_src
+Конструкторы могут быть перегружаемыми, поэтому метод super() можно вызывать, используя любую форму, определенную в суперклассе.
+#+begin_src java
+class Box {
+   private double width;
+   private double height;
+   private double depth;
+   // клон объекта
+   Box(Box ob) {
+      width = ob.width;
+      height = ob.height;
+      depth = ob.depth;
+   }
+   // все размеры
+   Box(double w, double h, double d) {
+      width = w;
+      height = h;
+      depth = d;
+   }
+   // отсутствие размеров
+   Box() {
+      width = -1;
+      height = -1;
+      depth = -1;
+   }
+   // куб
+   Box(double len) {
+      width = height = depth = len;
+   }
+   // расчет и возврат объема
+   double volume() {
+      return width * height * depth;
+   }
+}
+class BoxWeight extends Box {
+   double weight;
+   // сконструировать клон объекта
+   BoxWeight(BoxWeight ob) {
+      super(ob);
+      weight = ob.weight;
+   }
+   // все параметры
+   BoxWeight(double w, double h, double d, double m) {
+      super(w,h,d);
+      weight = m;
+   }
+   // конструктор по умолчанию
+   BoxWeight() {
+      super();
+      weight = -1;
+   }
+   // конструктор для куба
+   BoxWeight(double len, double m) {
+      super(len);
+      weight = m;
+   }
+}
+#+end_src
+Несмотря на то, что методу super() передается объект типа BoxWeight, а не Box, это все равно приводить к вызову конструктора Box(Box.ob).
+#+begin_src java
+BoxWeight(BoxWeight ob) {
+   super(ob);
+   weight = ob.weight;
+}
+#+end_src
+При вызове метода super() из подкласса вызывается конструктор его непосредственного суперкласса (на один выше).
+Это справледливо также для многоуровневой иерархии.
 *** Другое применение ключевого слова super
+Вторая форма ключевого слова super действует подобно ключевому слову this, за исключением того, что ссылка всегда делается на суперкласс того подкласса, в котором используется super.
+Общая форма применения:
+#+begin_src java
+super.член // член - переменная экземпляра или метод
+#+end_src
+Применяется когда имена членов подкласса скрывают члены суперкласса с такими же именами.
+#+begin_src java
+class A {
+   int i;
+}
+
+class B extends A {
+   int i; // этот член i  скрывает член i из класса А
+
+   B(int a, int b) {
+      super.i = a;   // член i  из класса А
+      i = b;         // член i  из класса В
+   }
+   void show() {
+      System.out.println("Член i в суперклассе: " + super.i);
+      System.out.println("Член i в подклассе: " + i);
+   }
+}
+
+public class UseSuper {
+   public static void main(String[] args) {
+      B subOb = new B(1,2);
+      subOb.show();
+   }
+}
+#+end_src
 ** Создание многоуровневой иерархии
 ** Порядок вызова конструкторов
 ** Переопределение методов
